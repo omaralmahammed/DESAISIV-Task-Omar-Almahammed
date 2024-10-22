@@ -1,0 +1,6 @@
+@DESAISIV_Task_Omar_Almahammed_HostAddress = http://localhost:5030
+
+GET {{DESAISIV_Task_Omar_Almahammed_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
