@@ -10,6 +10,7 @@ namespace DESAISIV_Task_Omar_Almahammed.models
 
         }
 
+        public DbSet<Book> Books { get; set; }
 
     }
 }
