@@ -21,9 +21,21 @@ namespace DESAISIV_Task_Omar_Almahammed.Controllers
         [HttpGet("GetAllBooks")]
         public IActionResult GetAllBooks()
         {
-            var allBooks = _db.Books.ToList();
+            try
+            {
+                var allBooks = _db.Books.ToList();
 
-            return Ok(allBooks);
+                if (allBooks == null)
+                {
+                    return NotFound("No books available.");
+                }
+
+                return Ok(allBooks);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, "An error occurred while retrieving the books.");
+            }
         }
 
 
@@ -31,16 +43,25 @@ namespace DESAISIV_Task_Omar_Almahammed.Controllers
         [HttpGet("GetBookDetails/{id}")]
         public IActionResult GetBookDetails(int id)
         {
-            var bookDetails = _db.Books.Find(id);
-
-            if (bookDetails == null)
+            try
             {
+                var bookDetails = _db.Books.Find(id);
 
-                return NotFound("This book not exist!");
+                if (bookDetails == null)
+                {
+
+                    return NotFound("This book not exist!");
+                }
+
+                return Ok(bookDetails);
             }
+            catch (Exception ex) {
 
-            return Ok(bookDetails);
+                return StatusCode(StatusCodes.Status500InternalServerError, "An error occurred while retrieving the books.");
+            }
         }
+
+
 
         [HttpPost("AddBook")]
         public IActionResult AddBook([FromBody] BookRequestDTO book)
@@ -50,23 +71,34 @@ namespace DESAISIV_Task_Omar_Almahammed.Controllers
                 return BadRequest(ModelState);
             }
 
-            Book newBook = new Book()
+            try
             {
-                Title = book.Title,
-                Author = book.Author,
-                PublicationYear = book.PublicationYear,
-            };
+                Book newBook = new Book()
+                {
+                    Title = book.Title,
+                    Author = book.Author,
+                    PublicationYear = book.PublicationYear,
+                };
 
-            _db.Books.Add(newBook);
-            _db.SaveChanges();
+                _db.Books.Add(newBook);
+                _db.SaveChanges();
 
-            return Ok(newBook);
+                return CreatedAtAction(nameof(GetBookDetails), new { id = newBook.BookId }, newBook);
+                }
+            catch (Exception ex) {
+                return StatusCode(StatusCodes.Status500InternalServerError, "An error occurred while adding the book.");
+            }
         }
 
 
         [HttpPut("UpdateBook/{id}")]
         public IActionResult UpdateBook([FromBody] BookRequestDTO book, int id)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
             var checkBook = _db.Books.Find(id);
 
             if (checkBook == null)
