@@ -84,8 +84,9 @@ namespace DESAISIV_Task_Omar_Almahammed.Controllers
                 _db.SaveChanges();
 
                 return CreatedAtAction(nameof(GetBookDetails), new { id = newBook.BookId }, newBook);
-                }
+            }
             catch (Exception ex) {
+
                 return StatusCode(StatusCodes.Status500InternalServerError, "An error occurred while adding the book.");
             }
         }
