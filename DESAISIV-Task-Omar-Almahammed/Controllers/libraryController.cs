@@ -18,7 +18,11 @@ namespace DESAISIV_Task_Omar_Almahammed.Controllers
         }
 
 
-        [HttpGet("GetAllBooks")]
+        [HttpGet("Get/AllBooks")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(404)]
+        [ProducesResponseType(500)]
+
         public IActionResult GetAllBooks()
         {
             try
@@ -40,7 +44,11 @@ namespace DESAISIV_Task_Omar_Almahammed.Controllers
 
 
 
-        [HttpGet("GetBookDetails/{id}")]
+        [HttpGet("Get/BookDetails/{id}")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(404)]
+        [ProducesResponseType(500)]
+
         public IActionResult GetBookDetails(int id)
         {
             try
@@ -64,6 +72,9 @@ namespace DESAISIV_Task_Omar_Almahammed.Controllers
 
 
         [HttpPost("AddBook")]
+        [ProducesResponseType(201, Type = typeof(BookRequestDTO))]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(500)]
         public IActionResult AddBook([FromBody] BookRequestDTO book)
         {
             if (!ModelState.IsValid)
@@ -93,6 +104,10 @@ namespace DESAISIV_Task_Omar_Almahammed.Controllers
 
 
         [HttpPut("UpdateBook/{id}")]
+        [ProducesResponseType(201)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(404)]
+        [ProducesResponseType(500)]
         public IActionResult UpdateBook([FromBody] BookRequestDTO book, int id)
         {
             if (!ModelState.IsValid)
@@ -116,7 +131,7 @@ namespace DESAISIV_Task_Omar_Almahammed.Controllers
                 _db.Books.Update(checkBook);
                 _db.SaveChanges();
 
-                return NoContent();
+                return Ok(checkBook);
             }
             catch (Exception ex) {
 
@@ -127,7 +142,9 @@ namespace DESAISIV_Task_Omar_Almahammed.Controllers
 
 
         [HttpDelete("DeleteBook/{id}")]
-
+        [ProducesResponseType(201)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(500)]
         public IActionResult DeleteBook(int id)
         {
             try
