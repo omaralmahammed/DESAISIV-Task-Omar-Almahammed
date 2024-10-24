@@ -46,3 +46,5 @@ Appropriate HTTP status codes are returned for different outcomes:
 404 Not Found for requests to non-existent resources.
 Documentation
 The API is documented using Swagger (Swashbuckle), which provides an interactive interface for exploring the available endpoints.
+
+Documentation link: https://docs.google.com/document/d/1P5YQyMdR4hEQUfJq9ncIYrAKvQmBMpwzoZo4hdXeNGk/edit?usp=sharing
