@@ -18,7 +18,7 @@ namespace DESAISIV_Task_Omar_Almahammed.Controllers
         }
 
 
-        [HttpGet("Get/AllBooks")]
+        [HttpGet("books")]
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(500)]
@@ -44,7 +44,7 @@ namespace DESAISIV_Task_Omar_Almahammed.Controllers
 
 
 
-        [HttpGet("Get/BookDetails/{id}")]
+        [HttpGet("books/{id}")]
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(500)]
@@ -71,7 +71,7 @@ namespace DESAISIV_Task_Omar_Almahammed.Controllers
 
 
 
-        [HttpPost("AddBook")]
+        [HttpPost("books")]
         [ProducesResponseType(201, Type = typeof(BookRequestDTO))]
         [ProducesResponseType(400)]
         [ProducesResponseType(500)]
@@ -103,7 +103,7 @@ namespace DESAISIV_Task_Omar_Almahammed.Controllers
         }
 
 
-        [HttpPut("UpdateBook/{id}")]
+        [HttpPut("books/{id}")]
         [ProducesResponseType(201)]
         [ProducesResponseType(400)]
         [ProducesResponseType(404)]
@@ -141,7 +141,7 @@ namespace DESAISIV_Task_Omar_Almahammed.Controllers
         }
 
 
-        [HttpDelete("DeleteBook/{id}")]
+        [HttpDelete("books/{id}")]
         [ProducesResponseType(201)]
         [ProducesResponseType(400)]
         [ProducesResponseType(500)]
