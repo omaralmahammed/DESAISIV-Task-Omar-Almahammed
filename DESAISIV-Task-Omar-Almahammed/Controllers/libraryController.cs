@@ -57,7 +57,7 @@ namespace DESAISIV_Task_Omar_Almahammed.Controllers
             }
             catch (Exception ex) {
 
-                return StatusCode(StatusCodes.Status500InternalServerError, "An error occurred while retrieving the books.");
+                return StatusCode(StatusCodes.Status500InternalServerError, "An error occurred while retrieving the book details.");
             }
         }
 
@@ -100,21 +100,29 @@ namespace DESAISIV_Task_Omar_Almahammed.Controllers
                 return BadRequest(ModelState);
             }
 
-            var checkBook = _db.Books.Find(id);
-
-            if (checkBook == null)
+            try
             {
-                return NotFound("This book not exist!");
+                var checkBook = _db.Books.Find(id);
+
+                if (checkBook == null)
+                {
+                    return NotFound("This book not exist!");
+                }
+
+                checkBook.Title = book.Title;
+                checkBook.Author = book.Author;
+                checkBook.PublicationYear = book.PublicationYear;
+
+                _db.Books.Update(checkBook);
+                _db.SaveChanges();
+
+                return NoContent();
             }
+            catch (Exception ex) {
 
-            checkBook.Title = book.Title;
-            checkBook.Author = book.Author;
-            checkBook.PublicationYear = book.PublicationYear;
+                return StatusCode(StatusCodes.Status500InternalServerError, "An error occurred while update the book details.");
 
-            _db.Books.Update(checkBook);
-            _db.SaveChanges();
-
-            return Ok(checkBook);
+            }
         }
 
 
@@ -122,17 +130,25 @@ namespace DESAISIV_Task_Omar_Almahammed.Controllers
 
         public IActionResult DeleteBook(int id)
         {
-            var book = _db.Books.Find(id);
-
-            if (book == null)
+            try
             {
-                return NotFound("This book not exist!");
-            }
-            
-            _db.Books.Remove(book);
-            _db.SaveChanges();
+                var book = _db.Books.Find(id);
 
-            return Ok();
+                if (book == null)
+                {
+                    return NotFound("This book not exist!");
+                }
+
+                _db.Books.Remove(book);
+                _db.SaveChanges();
+
+                return NoContent();
+            }
+            catch (Exception ex) {
+
+                return StatusCode(StatusCodes.Status500InternalServerError, "An error occurred while delete the book.");
+
+            }
         }
 
     }
