@@ -2,6 +2,7 @@
 using DESAISIV_Task_Omar_Almahammed.models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace DESAISIV_Task_Omar_Almahammed.Controllers
 {
@@ -23,11 +24,11 @@ namespace DESAISIV_Task_Omar_Almahammed.Controllers
         [ProducesResponseType(404)]
         [ProducesResponseType(500)]
 
-        public IActionResult GetAllBooks()
+        public async Task<IActionResult> GetAllBooks()
         {
             try
             {
-                var allBooks = _db.Books.ToList();
+                var allBooks = await _db.Books.ToListAsync();
 
                 if (allBooks == null)
                 {
@@ -44,16 +45,17 @@ namespace DESAISIV_Task_Omar_Almahammed.Controllers
 
 
 
+
         [HttpGet("books/{id}")]
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(500)]
 
-        public IActionResult GetBookDetails(int id)
+        public async Task<IActionResult> GetBookDetails(int id)
         {
             try
             {
-                var bookDetails = _db.Books.Find(id);
+                var bookDetails = await _db.Books.FindAsync(id);
 
                 if (bookDetails == null)
                 {
@@ -75,7 +77,7 @@ namespace DESAISIV_Task_Omar_Almahammed.Controllers
         [ProducesResponseType(201, Type = typeof(BookRequestDTO))]
         [ProducesResponseType(400)]
         [ProducesResponseType(500)]
-        public IActionResult AddBook([FromBody] BookRequestDTO book)
+        public async Task<IActionResult> AddBook([FromBody] BookRequestDTO book)
         {
             if (!ModelState.IsValid)
             {
@@ -92,23 +94,24 @@ namespace DESAISIV_Task_Omar_Almahammed.Controllers
                 };
 
                 _db.Books.Add(newBook);
-                _db.SaveChanges();
+                await _db.SaveChangesAsync();
 
                 return CreatedAtAction(nameof(GetBookDetails), new { id = newBook.BookId }, newBook);
             }
-            catch (Exception ex) {
-
+            catch (Exception ex)
+            {
                 return StatusCode(StatusCodes.Status500InternalServerError, "An error occurred while adding the book.");
             }
         }
 
 
+
         [HttpPut("books/{id}")]
-        [ProducesResponseType(201)]
+        [ProducesResponseType(200)]
         [ProducesResponseType(400)]
         [ProducesResponseType(404)]
         [ProducesResponseType(500)]
-        public IActionResult UpdateBook([FromBody] BookRequestDTO book, int id)
+        public async Task<IActionResult> UpdateBook([FromBody] BookRequestDTO book, int id)
         {
             if (!ModelState.IsValid)
             {
@@ -117,11 +120,11 @@ namespace DESAISIV_Task_Omar_Almahammed.Controllers
 
             try
             {
-                var checkBook = _db.Books.Find(id);
+                var checkBook = await _db.Books.FindAsync(id);
 
                 if (checkBook == null)
                 {
-                    return NotFound("This book not exist!");
+                    return NotFound("This book does not exist!");
                 }
 
                 checkBook.Title = book.Title;
@@ -129,44 +132,44 @@ namespace DESAISIV_Task_Omar_Almahammed.Controllers
                 checkBook.PublicationYear = book.PublicationYear;
 
                 _db.Books.Update(checkBook);
-                _db.SaveChanges();
+                await _db.SaveChangesAsync();
 
                 return Ok(checkBook);
             }
-            catch (Exception ex) {
-
-                return StatusCode(StatusCodes.Status500InternalServerError, "An error occurred while update the book details.");
-
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, "An error occurred while updating the book details.");
             }
         }
+
 
 
         [HttpDelete("books/{id}")]
-        [ProducesResponseType(201)]
+        [ProducesResponseType(204)]
         [ProducesResponseType(400)]
         [ProducesResponseType(500)]
-        public IActionResult DeleteBook(int id)
+        public async Task<IActionResult> DeleteBook(int id)
         {
             try
             {
-                var book = _db.Books.Find(id);
+                var book = await _db.Books.FindAsync(id); 
 
                 if (book == null)
                 {
-                    return NotFound("This book not exist!");
+                    return NotFound("This book does not exist!");
                 }
 
                 _db.Books.Remove(book);
-                _db.SaveChanges();
+                await _db.SaveChangesAsync();
 
                 return NoContent();
             }
-            catch (Exception ex) {
-
-                return StatusCode(StatusCodes.Status500InternalServerError, "An error occurred while delete the book.");
-
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, "An error occurred while deleting the book.");
             }
         }
+
 
     }
 }
